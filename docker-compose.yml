@@ -1,0 +1,45 @@
+version: "2"
+
+volumes:
+  netmon-datavolume:
+
+services:
+  redis:
+    image: redis
+
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=6Z2Z2mAC9362a0X
+      - MYSQL_USER=netmon
+      - MYSQL_PASSWORD=8j2o5N8Ctb5v2kQ
+      - MYSQL_DATABASE=netmon
+    volumes:
+      - netmon-datavolume:/var/lib/mysqll
+    ports:
+      - "127.0.0.66:3306:3306"
+
+  monitor:
+    image: matthewbaggett/netmon-agent
+    build: .
+    links:
+      - redis
+      - mysql
+    volumes:
+      - ./:/app
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=netmon
+      - MYSQL_PASSWORD=8j2o5N8Ctb5v2kQ
+      - MYSQL_DATABASE=netmon
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PING_HOSTS=8.8.8.8,news.bbc.co.uk,vpn.gone.io
+
+  redis-commander:
+    image: tenstartups/redis-commander
+    command: --redis-host redis
+    ports:
+      - "127.0.0.66:8080:8081"
+    links:
+      - redis

@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Running sync runner."
+while true; do
+   /app/sync.php
+   sleep 60s
+done
