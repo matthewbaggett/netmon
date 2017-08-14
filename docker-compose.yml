@@ -15,7 +15,7 @@ services:
       - MYSQL_PASSWORD=8j2o5N8Ctb5v2kQ
       - MYSQL_DATABASE=netmon
     volumes:
-      - netmon-datavolume:/var/lib/mysqll
+      - netmon-datavolume:/var/lib/mysql
     ports:
       - "127.0.0.66:3306:3306"
 

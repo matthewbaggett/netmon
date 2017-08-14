@@ -21,10 +21,12 @@ foreach($pingKeys as $key){
         $manipulatedTimeStamp = implode(" ", $manipulatedTimeStamp);
         $time = date("Y-m-d H:i:s", strtotime($manipulatedTimeStamp));
 
-        $stmt->bindParam('target', $target);
-        $stmt->bindParam('time', $time);
-        $stmt->bindParam('latency', $latency);
-        $stmt->execute();
+        if($latency) {
+            $stmt->bindParam('target', $target);
+            $stmt->bindParam('time', $time);
+            $stmt->bindParam('latency', $latency);
+            $stmt->execute();
+        }
     }
 }
 foreach($speedTestKeys as $key){
