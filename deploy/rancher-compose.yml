@@ -1,0 +1,14 @@
+version: '2'
+services:
+  redis-commander:
+    scale: 1
+    start_on_create: true
+  monitor:
+    scale: 1
+    start_on_create: true
+  redis:
+    scale: 1
+    start_on_create: true
+  syncer:
+    scale: 1
+    start_on_create: true

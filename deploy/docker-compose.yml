@@ -1,0 +1,48 @@
+version: '2'
+services:
+  redis-commander:
+    image: tenstartups/redis-commander
+    stdin_open: true
+    tty: true
+    links:
+    - redis:redis
+    command:
+    - --redis-host
+    - redis
+    labels:
+      io.rancher.container.pull_image: always
+  monitor:
+    image: matthewbaggett/netmon-agent
+    environment:
+      MYSQL_DATABASE: netmon
+      MYSQL_HOST: sql.gone.io
+      MYSQL_PASSWORD: sWQRKs3SnXjjg8us
+      MYSQL_USER: netmon
+      PING_HOSTS: 8.8.8.8,news.bbc.co.uk,vpn.gone.io
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+    links:
+    - redis:redis
+    labels:
+      io.rancher.container.pull_image: always
+  redis:
+    image: redis
+  syncer:
+    image: gone/rpi-redis-syncer
+    environment:
+     - LOCAL_REDIS_PROTOCOL=tcp
+     - LOCAL_REDIS_HOST=redis
+     - LOCAL_REDIS_PORT=6379
+     - REMOTE_REDIS_PROTOCOL=http
+     - REMOTE_REDIS_HOST=webdis.controlpanel.home.gone.io
+     - REMOTE_REDIS_PORT=80
+     - REMOTE_REDIS_USER=RemoteAccess
+     - REMOTE_REDIS_PASS=6iz7ulwS683N38C
+     - "REMOTE_ADDED_PREFIX=internet:virginmedia:"
+     - DELETE_ON_COPY=true
+    links:
+     - redis
+    volumes:
+     - "./sync:/app"
+    labels:
+      io.rancher.container.pull_image: always
